@@ -1,0 +1,38 @@
+import { Outlet } from "react-router-dom";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
+import LeftSidebar from "./components/LeftSidebar";
+import FriendsActivity from "./components/FriendsActivity";
+import AudioPlayer from "./components/AudioPlayer";
+
+const MainLayout = () => {
+  const isMobile = false;
+  return (
+    <div className="h-screen bg-balck text-white flex flex-col">
+      <ResizablePanelGroup orientation="horizontal" className="flex-1 flex h-full overflow-hidden p-2">
+        
+        <AudioPlayer />
+
+        {/* LEFT SIDEBAR */}
+        <ResizablePanel defaultSize={"20%"} minSize={isMobile ? 0 : "10%"} maxSize={"30%"}>
+          <LeftSidebar />
+        </ResizablePanel>
+
+        <ResizableHandle className="w-2 bg-black rounded-lg transition-colors" />
+
+        {/* MAIN CONTENT */}
+        <ResizablePanel defaultSize={isMobile ? "80%" : "60%"}>
+          <Outlet />
+        </ResizablePanel>
+
+        <ResizableHandle className="w-2 bg-black rounded-lg transition-colors" />
+
+        {/* RIGHT SIDEBAR */}
+        <ResizablePanel defaultSize={"20%"} minSize={0} maxSize={"25%"} collapsedSize={0}>
+          <FriendsActivity />
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
+  )
+}
+
+export default MainLayout; 

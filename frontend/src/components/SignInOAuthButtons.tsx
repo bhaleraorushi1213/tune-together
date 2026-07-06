@@ -1,5 +1,5 @@
 import { useSignIn } from "@clerk/react"
-import { Button } from "./ui/button.tsx"
+import { Button } from "./ui/button";
 
 const SignInOAuthButtons = () => {
   const { signIn, fetchStatus } = useSignIn();
@@ -10,10 +10,10 @@ const SignInOAuthButtons = () => {
     try {
       await signIn.sso({
         strategy: "oauth_google",
-        redirectUrl: "/sso-callback",
-        redirectCallbackUrl: "/auth-callback",
+        redirectCallbackUrl: "/sso-callback",
+        redirectUrl: "/auth-callback",
       })
-      
+
     } catch (error) {
       console.log("SSO error: ", error);
     }
