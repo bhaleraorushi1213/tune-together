@@ -45,7 +45,7 @@ app.use(fileUpload({
 }));
 
 // cron jobs
-const tempDir = path.join(process.cwd(), "tmp");
+const tempDir = path.join(process.cwd(), "temp");
 cron.schedule("0 * * * *", () => {
 	if (fs.existsSync(tempDir)) {
 		fs.readdir(tempDir, (err, files) => {
