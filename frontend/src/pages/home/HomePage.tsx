@@ -1,15 +1,18 @@
 import { useEffect } from "react";
 
 import { useMusicStore } from "../../stores/useMusicStore";
-import Topbar from "../../components/Topbar";
-import FeaturedSection from "./components/FeaturedSection";
 import { ScrollArea } from "../../components/ui/scroll-area";
+import { usePlayerStore } from "../../stores/usePlayerStore";
+
+import FeaturedSection from "./components/FeaturedSection";
 import SectionGrid from "./components/SectionGrid";
+import Topbar from "../../components/Topbar";
 
 const HomePage = () => {
   const {
     madeForYouSongs,
     trendingSongs,
+    featuredSongs,
     fetchFeaturedSongs,
     fetchMadeForYouSongs,
     fetchTrendingSongs,
@@ -17,11 +20,20 @@ const HomePage = () => {
     isTrendingLoading,
   } = useMusicStore();
 
+  const { initializeQueue } = usePlayerStore();
+
   useEffect(() => {
     fetchFeaturedSongs();
     fetchMadeForYouSongs();
     fetchTrendingSongs();
   }, [fetchFeaturedSongs, fetchMadeForYouSongs, fetchTrendingSongs])
+
+  useEffect(() => {
+    if(madeForYouSongs.length > 0 && featuredSongs.length > 0 && trendingSongs.length > 0) {
+      const allSongs = [...madeForYouSongs, ...trendingSongs, ...featuredSongs];
+      initializeQueue(allSongs);
+    };
+  }, [initializeQueue, madeForYouSongs, featuredSongs, trendingSongs])
 
   return (
     <main className="rounded-md overflow-hidden h-full bg-linear-to-b from-zinc-800 to-zinc-900">

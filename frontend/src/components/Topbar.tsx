@@ -12,7 +12,7 @@ const Topbar = () => {
   return (
     <div className="flex items-center justify-between p-4 sticky top-0 bg-zinc-900/75 backdrop-blur-md z-10">
       <div className="flex gap-2 items-center">
-        <div className="p-1.5 border border-zinc-400 rounded-full bg-emerald-500">
+        <div className="p-1.5 border border-zinc-400 rounded-full bg-green-500">
           <AudioWaveform className="size-8 text-zinc-900"  />
         </div>
         <p className="font-semibold">TuneTogether</p>

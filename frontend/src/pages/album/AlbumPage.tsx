@@ -6,12 +6,7 @@ import { Clock, Pause, Play } from "lucide-react";
 import { ScrollArea } from "../../components/ui/scroll-area.tsx";
 import { Button } from "../../components/ui/button.tsx";
 import { usePlayerStore } from "../../stores/usePlayerStore.ts";
-
-const formatDuration = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-};
+import { formatDuration } from "../../lib/utils.ts";
 
 const AlbumPage = () => {
   const { albumId } = useParams();
