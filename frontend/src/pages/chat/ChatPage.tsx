@@ -30,7 +30,10 @@ const ChatPage = () => {
   }, [fetchUsers, user]);
 
   useEffect(() => {
-    if (selectedUser) fetchMessages(selectedUser.clerkId);
+    if (selectedUser) {
+      fetchMessages(selectedUser.clerkId);
+      prevMessageCountRef.current = 0;
+    };
   }, [selectedUser, fetchMessages]);
 
   useEffect(() => {

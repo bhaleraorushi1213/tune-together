@@ -102,13 +102,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 				set((state) => {
 					const nextMessages = [...state.messages, message];
 					const currentUserId = (socket as any).auth?.userId;
+					const senderClerkId =
+						state.users.find((user) => user._id === message.senderId || user.clerkId === message.senderId)?.clerkId ??
+						message.senderId;
 					let nextUnread = { ...state.unreadCounts };
 					let nextTotal = state.totalUnread || 0;
 					// if this client is the receiver and the conversation with sender isn't open, increment unread
 					if (message.receiverId === currentUserId) {
-						const sender = message.senderId;
-						if (!state.selectedUser || state.selectedUser.clerkId !== sender) {
-							nextUnread = { ...nextUnread, [sender]: (nextUnread[sender] || 0) + 1 };
+						if (!state.selectedUser || state.selectedUser.clerkId !== senderClerkId) {
+							nextUnread = { ...nextUnread, [senderClerkId]: (nextUnread[senderClerkId] || 0) + 1 };
 							nextTotal += 1;
 						}
 					}
