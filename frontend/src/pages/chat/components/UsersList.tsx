@@ -5,7 +5,7 @@ import { useChatStore } from "../../../stores/useChatStore";
 import { cn } from "../../../lib/utils";
 
 const UsersList = () => {
-  const { users, selectedUser, setSelectedUser, onlineUsers, isUsersLoading } = useChatStore();
+  const { users, selectedUser, setSelectedUser, onlineUsers, isUsersLoading, unreadCounts } = useChatStore();
 
   return (
     <div className="h-full min-h-0 flex flex-col border-border sm:border-r overflow-hidden">
@@ -34,6 +34,11 @@ const UsersList = () => {
                       onlineUsers.has(user.clerkId) ? "bg-success" : "bg-text-faint"
                     )}
                   />
+                  {unreadCounts[user.clerkId] > 0 && (
+                    <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-medium leading-none rounded-full bg-primary text-primary-foreground">
+                      {unreadCounts[user.clerkId] > 99 ? "99+" : unreadCounts[user.clerkId]}
+                    </span>
+                  )}
                 </div>
 
                 {/* name now shows on mobile too, since mobile gets its own full-width pane instead of a squished icon rail */}

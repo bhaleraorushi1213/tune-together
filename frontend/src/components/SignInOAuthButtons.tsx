@@ -23,8 +23,9 @@ const SignInOAuthButtons = () => {
     <Button
       onClick={signInWithGoogle}
       variant="secondary"
-      className="w-full bg-surface-hover hover:bg-surface-raised text-text border border-border h-11 z-10"
+      className="w-full bg-surface-hover hover:bg-surface-raised text-text border border-border h-11 z-10 cursor-pointer"
     >
+      <img src="./google_logo.svg" alt="google-logo" className="size-6 object-cover" />
       Continue with Google
     </Button>
   )
