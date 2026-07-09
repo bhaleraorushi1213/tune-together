@@ -11,7 +11,7 @@ export default function NotFoundPage() {
 
 				{/* ANIMATED MUSICAL NOTE */}
 				<div className='flex justify-center animate-bounce'>
-					<Music className='h-24 w-24 text-emerald-500' />
+					<Music className='h-24 w-24 text-primary' />
 				</div>
 
 				{/* ERROR MESSAGE */}
@@ -34,7 +34,7 @@ export default function NotFoundPage() {
 					</Button>
 					<Button
 						onClick={() => navigate("/")}
-						className='bg-emerald-500 hover:bg-emerald-600 text-white w-full sm:w-auto'
+						className='bg-primary hover:bg-primary/70 text-white w-full sm:w-auto'
 					>
 						<Home className='mr-2 h-4 w-4' />
 						Back to Home

@@ -18,27 +18,34 @@ const AdminPage = () => {
     fetchAlbums();
     fetchSongs();
     fetchStats();
-  }, [fetchAlbums, fetchSongs, fetchStats])
+  }, [fetchAlbums, fetchSongs, fetchStats]);
 
   if (!isAdmin && !isLoading) {
-    return <div className="flex justify-center items-center h-screen text-6xl">Unauthorized</div>
+    return (
+      <div className="flex justify-center items-center h-screen text-4xl sm:text-6xl bg-base text-text px-4 text-center">
+        Unauthorized
+      </div>
+    );
   }
 
   return (
-    <div
-      className="min-h-screen bg-linear-to-b from-zinc-900 via-zinc-900 to-black text-zinc-100 p-8"
-    >
+    <div className="min-h-screen bg-linear-to-b from-surface via-base to-base text-text p-4 sm:p-8">
       <Header />
-
       <DashBoardStats />
 
-      <Tabs defaultValue="songs" className={"space-y-6"}>
-        <TabsList className={"p-1 bg-zinc-800/50"}>
-          <TabsTrigger value={"songs"} className="data-state-active:bg-zinc-700">
+      <Tabs defaultValue="songs" className="space-y-4 sm:space-y-6 flex flex-col">
+        <TabsList className="p-1 bg-surface border border-border">
+          <TabsTrigger
+            value="songs"
+            // className="data-[state=active]:bg-primary data-[state=active]:text-text text-text-muted"
+          >
             <Music className="mr-2 size-4" />
             Songs
           </TabsTrigger>
-          <TabsTrigger value={"albums"} className="data-state-active:bg-zinc-700">
+          <TabsTrigger
+            value="albums"
+            // className="data-[state=active]:bg-accent data-[state=active]:text-text text-text-muted"
+          >
             <ListMusic className="mr-2 size-4" />
             Albums
           </TabsTrigger>
@@ -51,7 +58,7 @@ const AdminPage = () => {
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
+  );
+};
 
-export default AdminPage; 
+export default AdminPage;

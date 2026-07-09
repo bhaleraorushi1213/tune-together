@@ -6,15 +6,15 @@ import AddSongDialog from "./AddSongDialog";
 
 const SongsTabContent = () => {
   return (
-    <Card>
+    <Card className="bg-surface border-border">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <Music className="size-5 text-emerald-500" />
-              Songs Library 
+            <CardTitle className="flex items-center gap-2 text-text font-display">
+              <Music className="size-5 text-primary" />
+              Songs Library
             </CardTitle>
-            <CardDescription>Manage your music tracks</CardDescription>
+            <CardDescription className="text-text-muted">Manage your music tracks</CardDescription>
           </div>
           <AddSongDialog />
         </div>
@@ -23,7 +23,7 @@ const SongsTabContent = () => {
         <SongsTable />
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 export default SongsTabContent;

@@ -1,48 +1,52 @@
 import UsersListSkeleton from "../../../components/skeletons/UsersListSkeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
 import { ScrollArea } from "../../../components/ui/scroll-area";
-import { useChatStore } from "../../../stores/useChatStore"
+import { useChatStore } from "../../../stores/useChatStore";
+import { cn } from "../../../lib/utils";
 
 const UsersList = () => {
   const { users, selectedUser, setSelectedUser, onlineUsers, isUsersLoading } = useChatStore();
 
   return (
-    <div className="border-r border-zinc-600">
-      <div className="flex flex-col h-full">
-        <ScrollArea className="h-[calc(100vh-280px)]">
-          <div className="space-y-2 p-4">
-            {isUsersLoading ? <UsersListSkeleton /> :
-              users.map((user) => (
-                <div
-                  key={user._id}
-                  onClick={() => setSelectedUser(user)}
-                  className={`flex items-center justify-center lg:justify-start gap-3 p-3 rounded-lg cursor-pointer transition-colors ${selectedUser?.clerkId === user.clerkId? "bg-zinc-900/70" : "hover:bg-zinc-900/50"}`}
-                >
-                  <div className="relative">
-                    <Avatar className="size-8 md:size-12">
-                      <AvatarImage src={user.imageUrl} alt={user.fullName} />
-                      <AvatarFallback>{user.fullName[0]}</AvatarFallback>
-                    </Avatar>
-
-                    {/* ONLINE INDICATOR */}
-                    <div 
-                      className={`absolute bottom-0 right-0 size-3 rounded-full ring-2 ring-zinc-900 ${onlineUsers.has(user.clerkId) ? "bg-green-500" : "bg-zinc-500"}`}
-                    />
-                  </div>
-
-                  <div className="flex-1 min-w-0 lg:block hidden">
-                    <span className="font-medium truncate">{user.fullName}</span>
-                  </div>
+    <div className="h-full min-h-0 flex flex-col border-border sm:border-r overflow-hidden">
+      <ScrollArea className="flex-1 min-h-0">
+        <div className="space-y-1 p-2 sm:p-4">
+          {isUsersLoading ? (
+            <UsersListSkeleton />
+          ) : (
+            users.map((user) => (
+              <div
+                key={user._id}
+                onClick={() => setSelectedUser(user)}
+                className={cn(
+                  "flex items-center gap-3 p-2.5 sm:p-3 rounded-lg cursor-pointer transition-colors",
+                  selectedUser?.clerkId === user.clerkId ? "bg-surface-hover" : "hover:bg-surface-hover"
+                )}
+              >
+                <div className="relative shrink-0">
+                  <Avatar className="size-10 sm:size-12">
+                    <AvatarImage src={user.imageUrl} alt={user.fullName} />
+                    <AvatarFallback>{user.fullName[0]}</AvatarFallback>
+                  </Avatar>
+                  <div
+                    className={cn(
+                      "absolute bottom-0 right-0 size-3 rounded-full ring-2 ring-surface",
+                      onlineUsers.has(user.clerkId) ? "bg-success" : "bg-text-faint"
+                    )}
+                  />
                 </div>
-              ))
 
-            }
-          </div>
-        </ScrollArea>
-
-      </div>
+                {/* name now shows on mobile too, since mobile gets its own full-width pane instead of a squished icon rail */}
+                <div className="flex-1 min-w-0">
+                  <span className="font-medium truncate text-text block">{user.fullName}</span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </ScrollArea>
     </div>
-  )
-}
+  );
+};
 
-export default UsersList
+export default UsersList;

@@ -18,6 +18,8 @@ import userRoutes from "./routes/user.route.js";
 import songRoutes from "./routes/song.route.js";
 import albumRoutes from "./routes/album.route.js";
 import statRoutes from "./routes/stat.route.js";
+import playlistRoutes from "./routes/playlist.route.js";
+import searchRoutes from "./routes/search.route.js";
 
 dotenv.config();
 
@@ -66,6 +68,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/songs", songRoutes);
 app.use("/api/albums", albumRoutes);
 app.use("/api/stats", statRoutes);
+app.use("/api/playlists", playlistRoutes);
+app.use("/api/search", searchRoutes);
 
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/dist')));

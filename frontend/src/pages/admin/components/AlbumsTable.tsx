@@ -4,12 +4,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Button } from "../../../components/ui/button";
 
 const AlbumsTable = () => {
-const { albums, isLoading, error, deleteAlbum } = useMusicStore();
+  const { albums, isLoading, error, deleteAlbum } = useMusicStore();
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-zinc-400"><Loader2 className="size-10 animate-spin" /></div>
+        <Loader2 className="size-10 animate-spin text-text-muted" />
       </div>
     );
   }
@@ -17,59 +17,62 @@ const { albums, isLoading, error, deleteAlbum } = useMusicStore();
   if (error) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-zinc-400">{error}</div>
+        <div className="text-danger">{error}</div>
       </div>
-    )
+    );
   }
+
   return (
-    <Table>
-			<TableHeader>
-				<TableRow className='hover:bg-zinc-800/50'>
-					<TableHead className='w-12.5'></TableHead>
-					<TableHead>Title</TableHead>
-					<TableHead>Artist</TableHead>
-					<TableHead>Release Year</TableHead>
-					<TableHead>Songs</TableHead>
-					<TableHead className='text-right'>Actions</TableHead>
-				</TableRow>
-			</TableHeader>
-			<TableBody>
-				{albums.map((album) => (
-					<TableRow key={album._id} className='hover:bg-zinc-800/50'>
-						<TableCell>
-							<img src={album.imageUrl} alt={album.title} className='w-10 h-10 rounded object-cover' />
-						</TableCell>
-						<TableCell className='font-medium'>{album.title}</TableCell>
-						<TableCell>{album.artist}</TableCell>
-						<TableCell>
-							<span className='inline-flex items-center gap-1 text-zinc-400'>
-								<Calendar className='h-4 w-4' />
-								{album.releaseYear}
-							</span>
-						</TableCell>
-						<TableCell>
-							<span className='inline-flex items-center gap-1 text-zinc-400'>
-								<Music className='h-4 w-4' />
-								{album.songs.length} songs
-							</span>
-						</TableCell>
-						<TableCell className='text-right'>
-							<div className='flex gap-2 justify-end'>
-								<Button
-									variant='ghost'
-									size='sm'
-									onClick={() => deleteAlbum(album._id)}
-									className='text-red-400 hover:text-red-300 hover:bg-red-400/10'
-								>
-									<Trash2 className='h-4 w-4' />
-								</Button>
-							</div>
-						</TableCell>
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
-  )
-}
+    <div className="overflow-x-auto -mx-2 sm:mx-0">
+      <Table className="min-w-150">
+        <TableHeader>
+          <TableRow className="hover:bg-surface-hover border-border">
+            <TableHead className="w-12.5"></TableHead>
+            <TableHead className="text-text-muted">Title</TableHead>
+            <TableHead className="text-text-muted">Artist</TableHead>
+            <TableHead className="text-text-muted">Release Year</TableHead>
+            <TableHead className="text-text-muted">Songs</TableHead>
+            <TableHead className="text-right text-text-muted">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {albums.map((album) => (
+            <TableRow key={album._id} className="hover:bg-surface-hover border-border">
+              <TableCell>
+                <img src={album.imageUrl} alt={album.title} className="w-10 h-10 rounded object-cover" />
+              </TableCell>
+              <TableCell className="font-medium text-text">{album.title}</TableCell>
+              <TableCell className="text-text-muted">{album.artist}</TableCell>
+              <TableCell>
+                <span className="inline-flex items-center gap-1 text-text-muted">
+                  <Calendar className="h-4 w-4" />
+                  {album.releaseYear}
+                </span>
+              </TableCell>
+              <TableCell>
+                <span className="inline-flex items-center gap-1 text-text-muted">
+                  <Music className="h-4 w-4" />
+                  {album.songs.length} songs
+                </span>
+              </TableCell>
+              <TableCell className="text-right">
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => deleteAlbum(album._id)}
+                    className="text-danger hover:text-danger hover:bg-danger/10"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
 
 export default AlbumsTable;
