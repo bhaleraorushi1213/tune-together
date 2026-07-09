@@ -14,6 +14,8 @@ interface ChatStore {
 	userActivities: Map<string, string>;
 	messages: Message[];
 	selectedUser: User | null;
+	unreadCounts: Record<string, number>;
+	totalUnread: number;
 
 	fetchUsers: () => Promise<void>;
 	initSocket: (userId: string) => void;
@@ -34,6 +36,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 	users: [],
 	messages: [],
 	selectedUser: null,
+	unreadCounts: {},
+	totalUnread: 0,
 	error: null,
 	socket: socket,
 	onlineUsers: new Set(),
@@ -42,7 +46,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 	isLoading: false,
 	isConnected: false,
 
-	setSelectedUser: (user) => set({ selectedUser: user }),
+	setSelectedUser: (user) => {
+		set((state) => {
+			if (!user) return { selectedUser: null };
+			const nextUnread = { ...state.unreadCounts };
+			const prevCount = nextUnread[user.clerkId] || 0;
+			if (prevCount > 0) delete nextUnread[user.clerkId];
+			const nextTotal = Math.max(0, (state.totalUnread || 0) - prevCount);
+			return { selectedUser: user, unreadCounts: nextUnread, totalUnread: nextTotal };
+		});
+	},
 
 	fetchUsers: async () => {
 		set({ isUsersLoading: true, error: null });
@@ -86,9 +99,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 			});
 
 			socket.on("receive_message", (message: Message) => {
-				set((state) => ({
-					messages: [...state.messages, message],
-				}));
+				set((state) => {
+					const nextMessages = [...state.messages, message];
+					const currentUserId = (socket as any).auth?.userId;
+					const senderClerkId =
+						state.users.find((user) => user._id === message.senderId || user.clerkId === message.senderId)?.clerkId ??
+						message.senderId;
+					let nextUnread = { ...state.unreadCounts };
+					let nextTotal = state.totalUnread || 0;
+					// if this client is the receiver and the conversation with sender isn't open, increment unread
+					if (message.receiverId === currentUserId) {
+						if (!state.selectedUser || state.selectedUser.clerkId !== senderClerkId) {
+							nextUnread = { ...nextUnread, [senderClerkId]: (nextUnread[senderClerkId] || 0) + 1 };
+							nextTotal += 1;
+						}
+					}
+					return { messages: nextMessages, unreadCounts: nextUnread, totalUnread: nextTotal };
+				});
 			});
 
 			socket.on("message_sent", (message: Message) => {
@@ -128,7 +155,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
 		try {
 			const response = await axiosInstance.get(`/users/messages/${userId}`);
-			set({ messages: response.data });
+			// clear unread for this conversation
+			set((state) => {
+				const nextUnread = { ...state.unreadCounts };
+				const prevCount = nextUnread[userId] || 0;
+				if (prevCount > 0) {
+					delete nextUnread[userId];
+				}
+				const nextTotal = Math.max(0, (state.totalUnread || 0) - prevCount);
+				return { messages: response.data, unreadCounts: nextUnread, totalUnread: nextTotal };
+			});
 		} catch (error: any) {
 			set({ error: error?.response?.data?.message ?? "Failed to fetch messages" });
 		} finally {

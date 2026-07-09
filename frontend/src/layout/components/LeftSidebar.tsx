@@ -4,6 +4,7 @@ import { Show } from "@clerk/react";
 import { cn } from "../../lib/utils.ts";
 import { HomeIcon, Library, MessageCircle, ListMusic, Heart } from "lucide-react";
 import { buttonVariants } from "../../components/ui/buttonVariants";
+import { useChatStore } from "../../stores/useChatStore";
 import { ScrollArea } from "../../components/ui/scroll-area";
 
 import PlaylistSkeleton from "../../components/skeletons/PlaylistSkeleton";
@@ -14,6 +15,8 @@ const navLinkClass = "w-full justify-start text-text-muted hover:text-text hover
 
 const LeftSidebar = () => {
   const { albums, fetchAlbums, isLoading } = useMusicStore();
+
+  const { totalUnread } = useChatStore();
 
   useEffect(() => {
     fetchAlbums();
@@ -31,7 +34,14 @@ const LeftSidebar = () => {
 
           <Show when="signed-in">
             <Link to={"/chat"} className={cn(buttonVariants({ variant: "ghost", className: navLinkClass }))}>
-              <MessageCircle className="mr-2 size-5" />
+              <div className="relative mr-2">
+                <MessageCircle className="size-5" />
+                {totalUnread > 0 && (
+                  <span className="absolute -top-2 -right-3 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-medium leading-none rounded-full bg-primary text-text">
+                    {totalUnread > 99 ? "99+" : totalUnread}
+                  </span>
+                )}
+              </div>
               <span className="hidden md:inline">Messages</span>
             </Link>
             <Link to={"/liked"} className={cn(buttonVariants({ variant: "ghost", className: navLinkClass }))}>

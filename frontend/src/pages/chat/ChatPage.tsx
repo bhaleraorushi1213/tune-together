@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useChatStore } from "../../stores/useChatStore";
 import { useUser } from "@clerk/react";
 import Topbar from "../../components/Topbar";
@@ -22,27 +22,46 @@ const ChatPage = () => {
   const { user } = useUser();
   const { messages, selectedUser, fetchUsers, fetchMessages } = useChatStore();
 
+  const endOfMessagesRef = useRef<HTMLDivElement>(null);
+  const prevMessageCountRef = useRef(0);
+
   useEffect(() => {
     if (user) fetchUsers();
   }, [fetchUsers, user]);
 
   useEffect(() => {
-    if (selectedUser) fetchMessages(selectedUser.clerkId);
+    if (selectedUser) {
+      fetchMessages(selectedUser.clerkId);
+      prevMessageCountRef.current = 0;
+    };
   }, [selectedUser, fetchMessages]);
+
+  useEffect(() => {
+    if (!selectedUser || messages.length === 0) {
+      prevMessageCountRef.current = messages.length;
+      return;
+    }
+
+    const shouldAutoScroll = messages.length > prevMessageCountRef.current;
+    prevMessageCountRef.current = messages.length;
+
+    if (shouldAutoScroll) {
+      requestAnimationFrame(() => {
+        endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      });
+    }
+  }, [messages, selectedUser]);
 
   return (
     <main className="h-full rounded-lg bg-linear-to-b from-surface to-base overflow-hidden flex flex-col">
       <Topbar />
 
-      <div className="flex-1 min-h-0 grid sm:grid-cols-[300px_1fr]">
-        {/* MOBILE: user list is full-pane and hides once a chat is open.
-            DESKTOP/TABLET: list is always visible as the left column. */}
+      <div className="flex-1 min-h-0 grid sm:grid-cols-[250px_1fr]">
+
         <div className={cn("min-h-0 overflow-hidden", selectedUser ? "hidden sm:block" : "block")}>
           <UsersList />
         </div>
 
-        {/* MOBILE: chat pane only renders once a user is selected, and takes the full screen.
-            DESKTOP/TABLET: always occupies the right column. */}
         <div className={cn("min-h-0 flex flex-col overflow-hidden", selectedUser ? "flex" : "hidden sm:flex")}>
           {selectedUser ? (
             <>
@@ -76,6 +95,7 @@ const ChatPage = () => {
                       </div>
                     </div>
                   ))}
+                  <div ref={endOfMessagesRef} />
                 </div>
               </ScrollArea>
 
