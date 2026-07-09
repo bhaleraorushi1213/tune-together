@@ -100,16 +100,16 @@ const AddSongDialog = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
-        <Button className={"bg-emerald-500 hover:bg-emerald-600 text-black"}>
+        <Button className="bg-primary hover:bg-primary-hover text-text w-full sm:w-auto">
           <Plus className="size-4 mr-2" />
           Add Song
         </Button>
       </DialogTrigger>
 
-      <DialogContent className={"bg-zinc-900 border-zinc-700 maxh-[80vh] overflow-auto"}>
+      <DialogContent className={"bg-surface border-border max-h-[85vh] overflow-y-auto w-[95vw] sm:w-full"}>
         <DialogHeader>
-          <DialogTitle>Add New Song</DialogTitle>
-          <DialogDescription>Add a new song to your music library</DialogDescription>
+          <DialogTitle className="text-text font-display">Add New Song</DialogTitle>
+          <DialogDescription className="text-text-muted">Add a new song to your music library</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
@@ -130,8 +130,11 @@ const AddSongDialog = () => {
 
           {/* IMAGE UPLOAD AREA */}
           <div
-            className="flex items-center justify-center p-6 border-2 border-dashed border-zinc-700 rounded-lg cursor-pointer"
-            onClick={() => imageInputRef.current?.click()}
+            className="flex items-center justify-center p-6 border-2 border-dashed border-border rounded-lg cursor-pointer"
+            onClick={() => {
+              if(isLoading) return;
+              imageInputRef.current?.click();
+            }}
           >
             <div className="text-center">
               {files.image ? (
@@ -141,11 +144,11 @@ const AddSongDialog = () => {
                 </div>
               ) : (
                 <>
-                  <div className="p-3 bg-zinc-800 rounded-full inline-block mb-2">
+                  <div className="p-3 bg-surface-hover rounded-full inline-block mb-2">
                     <Upload className="size-6 text-zinc-400" />
                   </div>
                   <div className="text-sm text-zinc-400 mb-2">Upload artwork</div>
-                  <Button variant={"outline"} size="sm" className={"text-xs"}>
+                  <Button variant={"outline"} size="sm" className={"text-xs"} disabled={isLoading}>
                     Choose File
                   </Button>
                 </>
@@ -157,7 +160,7 @@ const AddSongDialog = () => {
           <div className="space-y-2">
             <label className="text-sm font-medium ">Audio Files</label>
             <div className="flex items-center gap-2">
-              <Button variant={"outline"} onClick={() => audioInputRef.current?.click()} className={"w-full"}>
+              <Button variant={"outline"} onClick={() => audioInputRef.current?.click()} className={"w-full"} disabled={isLoading}>
                 {files.audio ? files.audio.name.slice(0, 20) : "Choose Audio File"}
               </Button>
             </div>
@@ -168,7 +171,8 @@ const AddSongDialog = () => {
             <Input
               value={newSong.title}
               onChange={(e) => setNewSong({ ...newSong, title: e.target.value })}
-              className="bg-zinc-800 border-zinc-700"
+              className="bg-surface-hover border-border text-text"
+              disabled={isLoading}
             />
           </div>
 
@@ -177,7 +181,8 @@ const AddSongDialog = () => {
             <Input
               value={newSong.artist}
               onChange={(e) => setNewSong({ ...newSong, artist: e.target.value })}
-              className="bg-zinc-800 border-zinc-700"
+              className="bg-surface-hover border-border text-text"
+              disabled={isLoading}
             />
           </div>
 
@@ -188,7 +193,8 @@ const AddSongDialog = () => {
               min="0"
               value={newSong.duration}
               onChange={(e) => setNewSong({ ...newSong, duration: e.target.value || "0" })}
-              className="bg-zinc-800 border-zinc-700"
+              className="bg-surface-hover border-border text-text"
+              disabled={isLoading}
             />
           </div>
 
@@ -197,11 +203,12 @@ const AddSongDialog = () => {
             <Select
               value={newSong.album}
               onValueChange={(val) => setNewSong({ ...newSong, album: val })}
+              disabled={isLoading}
             >
-              <SelectTrigger className="bg-zinc-800 border-zinc-700 w-full">
+              <SelectTrigger className="bg-surface-hover border-border w-full">
                 <SelectValue placeholder="Select an album" />
               </SelectTrigger>
-              <SelectContent className={"bg-zinc-800 border-zinc-700"}>
+              <SelectContent className={"bg-surface-hover border-border"}>
                 <SelectItem value="none">No Album (Single)</SelectItem>
                 {albums.map((album) => (
                   <SelectItem key={album._id} value={album._id}>

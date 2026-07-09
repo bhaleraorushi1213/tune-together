@@ -4,23 +4,23 @@ import { Show, UserButton } from "@clerk/react";
 
 const Header = () => {
   return (
-    <div className="flex items-start justify-between">
-      <div className="flex items-center gap-3 mb-8">
-        <Link to="/" className="rounded-lg">
-          <div className="p-1.5 border border-zinc-400 rounded-full bg-green-500">
-            <AudioWaveform className="size-10 text-zinc-900" />
+    <div className="flex sm:items-start justify-between gap-4 mb-4">
+      <div className="flex items-center gap-3 mb-4 sm:mb-8">
+        <Link to="/" className="rounded-lg shrink-0">
+          <div className="p-1.5 rounded-lg bg-primary">
+            <AudioWaveform className="size-8 sm:size-10 text-text" />
           </div>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold">Music Manager</h1>
-          <p className="text-zinc-400 mt-1">Manage your music catalog</p>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-text">Music Manager</h1>
+          <p className="text-text-muted mt-1 text-sm sm:text-text">Manage your music catalog</p>
         </div>
       </div>
       <Show when="signed-in">
-        <UserButton />
+        <UserButton  />
       </Show>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

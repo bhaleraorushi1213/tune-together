@@ -6,25 +6,24 @@ type StatsCardProps = {
   value: string;
   bgColor: string;
   iconColor: string;
-}
+};
 
 const StatsCard = ({ icon: Icon, label, value, bgColor, iconColor }: StatsCardProps) => {
-
   return (
-    <Card className="bg-zinc-800/50 border-zinc-700/50 hover:bg-zinc-800/80 transition-colors">
-      <CardContent className="p-6">
-        <div className="flex items-center gap-4">
-          <div className={`p-3 rounded-lg ${bgColor}`}>
-            <Icon className={`size-6 ${iconColor}`} />
+    <Card className="bg-surface border-border hover:bg-surface-hover transition-colors">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className={`p-2.5 sm:p-3 rounded-lg shrink-0 ${bgColor}`}>
+            <Icon className={`size-5 sm:size-6 ${iconColor}`} />
           </div>
-          <div>
-            <p className="text-sm text-zinc-400">{label}</p>
-            <p className="text-2xl font-bold">{value}</p>
+          <div className="min-w-0">
+            <p className="text-xs sm:text-sm text-text-muted truncate">{label}</p>
+            <p className="text-xl sm:text-2xl font-display font-bold text-text">{value}</p>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
-} 
+  );
+};
 
-export default StatsCard
+export default StatsCard;

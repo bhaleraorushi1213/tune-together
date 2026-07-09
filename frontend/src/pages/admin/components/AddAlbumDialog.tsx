@@ -64,15 +64,15 @@ const AddAlbumDialog = () => {
   return (
     <Dialog open={albumDialogOpen} onOpenChange={setAlbumDialogOpen}>
       <DialogTrigger>
-        <Button className='bg-violet-500 hover:bg-violet-600 text-white'>
-          <Plus className='mr-2 h-4 w-4' />
+        <Button className="bg-accent hover:bg-accent-hover text-text w-full sm:w-auto">
+          <Plus className="mr-2 h-4 w-4" />
           Add Album
         </Button>
       </DialogTrigger>
-      <DialogContent className='bg-zinc-900 border-zinc-700'>
+      <DialogContent className='bg-surface border-border max-h-[85vh] overflow-y-auto w-[95vw] sm:w-full'>
         <DialogHeader>
-          <DialogTitle>Add New Album</DialogTitle>
-          <DialogDescription>Add a new album to your collection</DialogDescription>
+          <DialogTitle className="text-text font-display">Add New Album</DialogTitle>
+          <DialogDescription className="text-text-muted">Add a new album to your collection</DialogDescription>
         </DialogHeader>
         <div className='space-y-4 py-4'>
           <input
@@ -83,11 +83,11 @@ const AddAlbumDialog = () => {
             className='hidden'
           />
           <div
-            className='flex items-center justify-center p-6 border-2 border-dashed border-zinc-700 rounded-lg cursor-pointer'
+            className='flex items-center justify-center p-6 border-2 border-dashed border-border rounded-lg cursor-pointer'
             onClick={() => fileInputRef.current?.click()}
           >
             <div className='text-center'>
-              <div className='p-3 bg-zinc-800 rounded-full inline-block mb-2'>
+              <div className='p-3 bg-surface-hover rounded-full inline-block mb-2'>
                 <Upload className='h-6 w-6 text-zinc-400' />
               </div>
               <div className='text-sm text-zinc-400 mb-2'>
@@ -103,7 +103,7 @@ const AddAlbumDialog = () => {
             <Input
               value={newAlbum.title}
               onChange={(e) => setNewAlbum({ ...newAlbum, title: e.target.value })}
-              className='bg-zinc-800 border-zinc-700'
+              className='bg-surface-hover border-border text-text'
               placeholder='Enter album title'
             />
           </div>
@@ -112,7 +112,7 @@ const AddAlbumDialog = () => {
             <Input
               value={newAlbum.artist}
               onChange={(e) => setNewAlbum({ ...newAlbum, artist: e.target.value })}
-              className='bg-zinc-800 border-zinc-700'
+              className='bg-surface-hover border-border text-text'
               placeholder='Enter artist name'
             />
           </div>
@@ -122,7 +122,7 @@ const AddAlbumDialog = () => {
               type='number'
               value={newAlbum.releaseYear}
               onChange={(e) => setNewAlbum({ ...newAlbum, releaseYear: parseInt(e.target.value) })}
-              className='bg-zinc-800 border-zinc-700'
+              className='bg-surface-hover border-border text-text'
               placeholder='Enter release year'
               min={1900}
               max={new Date().getFullYear()}

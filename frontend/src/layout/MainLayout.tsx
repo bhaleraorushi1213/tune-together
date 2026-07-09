@@ -1,59 +1,36 @@
 import { Outlet } from "react-router-dom";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
 import LeftSidebar from "./components/LeftSidebar";
 import FriendsActivity from "./components/FriendsActivity";
 import AudioPlayer from "./components/AudioPlayer";
 import PlaybackControls from "./components/PlaybackControls";
-import { useEffect, useState } from "react";
+import MobileNav from "./components/MobileNav";
 
 const MainLayout = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    }
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    }
-  }, [])
-
   return (
-    <div className="h-screen bg-balck text-white flex flex-col">
-      <ResizablePanelGroup orientation="horizontal" className="flex-1 flex h-full overflow-hidden p-2">
+    <div className="h-screen bg-base text-text flex flex-col">
+      <AudioPlayer />
 
-        <AudioPlayer />
-
-        {/* LEFT SIDEBAR */}
-        <ResizablePanel defaultSize={"20%"} minSize={isMobile ? 0 : "10%"} maxSize={"30%"}>
+      <div className="flex-1 flex overflow-hidden gap-2 p-2 min-h-0">
+        {/* LEFT SIDEBAR — icon-only on tablet, hidden below sm (mobile uses bottom nav) */}
+        <div className="hidden sm:flex sm:w-20 md:w-64 shrink-0 h-full overflow-hidden">
           <LeftSidebar />
-        </ResizablePanel>
-
-        <ResizableHandle className="w-2 bg-black rounded-lg transition-colors" />
+        </div>
 
         {/* MAIN CONTENT */}
-        <ResizablePanel defaultSize={isMobile ? "80%" : "60%"}>
+        <div className="flex-1 min-w-0 overflow-hidden">
           <Outlet />
-        </ResizablePanel>
+        </div>
 
-        {!isMobile && (
-          <>
-            <ResizableHandle className="w-2 bg-black rounded-lg transition-colors" />
+        {/* RIGHT SIDEBAR — only on wide screens, no breakpoint listener needed */}
+        <div className="hidden xl:flex xl:w-72 shrink-0">
+          <FriendsActivity />
+        </div>
+      </div>
 
-            {/* RIGHT SIDEBAR */}
-            <ResizablePanel defaultSize={"20%"} minSize={0} maxSize={"25%"} collapsedSize={0}>
-              <FriendsActivity />
-            </ResizablePanel>
-          </>
-        )}
-      </ResizablePanelGroup>
-
+      <MobileNav />
       <PlaybackControls />
     </div>
-  )
-}
+  );
+};
 
-export default MainLayout; 
+export default MainLayout;
